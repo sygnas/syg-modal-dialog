@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SygModalDialog - デモ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+      color: #333;
+      text-align: center;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .demo-section h2 {
+      margin-bottom: 20px;
+      color: #555;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .demo-button,
+    .demo-link {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      text-align: center;
+    }
+
+    .demo-button:hover,
+    .demo-link:hover {
+      background: #45a049;
+    }
+
+    .demo-link.youtube {
+      background: #FF0000;
+    }
+
+    .demo-link.youtube:hover {
+      background: #cc0000;
+    }
+
+    .demo-link.image {
+      background: #2196F3;
+    }
+
+    .demo-link.image:hover {
+      background: #0b7dda;
+    }
+
+    .hidden-content {
+      display: none;
+    }
+
+    .gallery-content {
+      padding: 20px;
+    }
+
+    .gallery-content h3 {
+      margin-bottom: 20px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-grid a {
+      display: block;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s;
+    }
+
+    .gallery-grid a:hover img {
+      transform: scale(1.05);
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .c-modal{
+      --c-modal--theme-max-width: 600px;
+      --c-modal--theme-bg-color: #adfdfa;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 SygModalDialog デモ</h1>
+
+  <div class="demo-section">
+    <h2>📷 画像表示</h2>
+    <p>画像をクリックすると拡大表示されます。クリックでズーム、ドラッグで移動できます。</p>
+    <div class="demo-grid">
+      <a href="https://fastly.picsum.photos/id/625/1024/768.jpg?hmac=MDqEkgdnwvjsXkGH-qF3OXnWcb7cWbs4yW3qi3-4GQ0" data-syg-modal="image" class="demo-link image">
+        画像 1
+      </a>
+      <a href="https://picsum.photos/1024/768" data-syg-modal="image" class="demo-link image">
+        画像 2
+      </a>
+      <a href="https://picsum.photos/1024/768" data-syg-modal="image" class="demo-link image">
+        画像 3
+      </a>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>🎬 YouTube動画</h2>
+    <p>YouTube動画を自動再生で表示します。</p>
+    <div class="demo-grid">
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" data-syg-modal class="demo-link youtube">
+        YouTube動画 1
+      </a>
+      <a href="https://youtu.be/jNQXAC9IVRw" data-syg-modal class="demo-link youtube">
+        YouTube動画 2
+      </a>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>📄 セレクタでページ内要素を表示</h2>
+    <p>ページ内の非表示要素をモーダルで表示します。</p>
+    <button class="demo-button" data-syg-modal="selector" data-syg-modal-src="#content1">
+      コンテンツ 1
+    </button>
+    <button class="demo-button" data-syg-modal="selector" data-syg-modal-src="#gallery">
+      ギャラリー
+    </button>
+  </div>
+
+  <div class="demo-section">
+    <h2>🔗 Ajax取得</h2>
+    <p>外部HTMLファイルを取得して表示します。</p>
+    <a href="/demo/sample.html" data-syg-modal="ajax" class="demo-link">
+      sample.html を開く
+    </a>
+  </div>
+
+  <div class="demo-section">
+    <h2>💻 プログラムから起動</h2>
+    <p>JavaScriptから直接モーダルを開きます。</p>
+    <button class="demo-button" id="programButton">
+      HTML文字列を表示
+    </button>
+  </div>
+
+  <!-- 非表示コンテンツ -->
+  <div id="content1" class="hidden-content">
+    <div style="padding: 20px;">
+      <h3>📝 サンプルコンテンツ</h3>
+      <p>これはページ内の非表示要素です。</p>
+      <p>セレクタを使って表示しています。</p>
+      <ul>
+        <li>項目 1</li>
+        <li>項目 2</li>
+        <li>項目 3</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="gallery" class="hidden-content">
+    <div class="gallery-content">
+      <h3>🖼️ ギャラリー</h3>
+      <p>モーダル内でさらに画像をクリックすると、モーダルを閉じずにコンテンツを切り替えられます。</p>
+      <div class="gallery-grid">
+        <a href="https://picsum.photos/800/600?random=10" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=10" alt="画像1">
+        </a>
+        <a href="https://picsum.photos/800/600?random=11" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=11" alt="画像2">
+        </a>
+        <a href="https://picsum.photos/800/600?random=12" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=12" alt="画像3">
+        </a>
+        <a href="https://picsum.photos/800/600?random=13" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=13" alt="画像4">
+        </a>
+        <a href="https://picsum.photos/800/600?random=14" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=14" alt="画像5">
+        </a>
+        <a href="https://picsum.photos/800/600?random=15" data-syg-modal>
+          <img src="https://picsum.photos/200/150?random=15" alt="画像6">
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ライブラリの読み込み -->
+  <script type="module">
+    import { SygModalDialog } from '../src/js/SygModalDialog.ts';
+    import '../src/css/syg-modal-dialog.scss';
+
+    // data-syg-modal属性の要素をバインド
+    SygModalDialog.bind('[data-syg-modal]', {
+      closeButtonContent: '✕',
+      onOpen: () => console.log('モーダルが開きました'),
+      onClose: () => console.log('モーダルが閉じました'),
+    });
+
+    // プログラムから起動
+    document.getElementById('programButton').addEventListener('click', () => {
+      SygModalDialog.showModal({
+        type: 'html',
+        html: `
+          <div style="padding: 40px; text-align: center;">
+            <h2>🚀 プログラムから起動</h2>
+            <p>HTML文字列を直接表示しています。</p>
+            <p>このように、JavaScriptから自由にモーダルを制御できます。</p>
+            <button onclick="alert('Hello!')" style="padding: 10px 20px; margin-top: 20px; cursor: pointer;">
+              クリックしてね
+            </button>
+          </div>
+        `,
+      });
+    });
+  </script>
+</body>
+</html>

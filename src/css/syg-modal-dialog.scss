@@ -1,0 +1,164 @@
+
+// 以下はフレームワークとしての初期値（theme系を優先）
+.c-modal{
+  --c-modal--color: var(--c-modal--theme-color, inherit);
+  --c-modal--bg-color: var(--c-modal--theme-bg-color, transparent);
+  --c-modal--youtube-width: var(--c-modal--theme-youtube-width, 800px);
+  --c-modal--max-width: var(--c-modal--theme-max-width, 100%);
+  --c-modal--margin-tb: var(--c-modal--theme-margin-tb, 4rem);
+  --c-modal--padding: var(--c-modal--theme-padding, 0);
+  --c-modal--border: var(--c-modal--theme-border, none);
+  --c-modal--duration: var(--c-modal--theme-duration, .2s);
+  --c-modal--backdrop-bg-color: var(--c-modal--theme-backdrop-bg-color, rgba(0, 0, 0, 0.8));
+  --c-modal--close-right: var(--c-modal--theme-close-right, 1rem);
+  --c-modal--close-top: var(--c-modal--theme-close-top, 0);
+  --c-modal--close-size: var(--c-modal--theme-close-size, 4rem);
+  --c-modal--close-color: var(--c-modal--theme-close-color, #fff);
+  --c-modal--close-color-hover: var(--c-modal--theme-close-color-hover, var(--root-color_green));
+  --c-modal--close-transition: var(--c-modal--theme-close-transition, .2s);
+  --c-modal--loading-size: var(--c-modal--theme-loading-size, 2rem);
+  --c-modal--loading-color: var(--c-modal--theme-loading-color, #fff);
+}
+
+.c-modal{
+  width: 100%;
+  max-width: var(--c-modal--max-width);
+  max-height: calc(100% - (var(--c-modal--margin-tb) * 2));
+  margin: auto;
+  padding: var(--c-modal--padding);
+  background-color: var(--c-modal--bg-color);
+  color: var(--c-modal--color);
+  border: var(--c-modal--border);
+
+  // 背景
+  &::backdrop{
+    background-color: var(--c-modal--backdrop-bg-color);
+  }
+
+  // image
+  &[data-syg-modal-type="image"]{
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    padding: 0;
+    background-color: transparent;
+    overflow: hidden;
+
+    .c-modal__container{
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s ease-out;
+    }
+
+    #syg-modal-content{
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+    }
+  }
+
+  // youtube
+  &[data-syg-modal-type="youtube"]{
+    width: var(--c-modal--youtube-width);
+    padding: 0;
+    background-color: transparent;
+
+    iframe{
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      border: none;
+    }
+  }
+
+  // 開いてる状態
+  &[open]{
+    animation-name: c-modal-open;
+    animation-fill-mode: forwards;
+    animation-duration: var(--c-modal--duration);
+    animation-timing-function: ease-out;
+
+    &::backdrop{
+      animation-name: c-modal-open;
+      animation-fill-mode: forwards;
+      animation-duration: var(--c-modal--duration);
+      animation-timing-function: ease-out;
+    }
+  }
+}
+
+@keyframes c-modal-open{
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
+.c-modal__close-btn{
+  position: fixed;
+  right: var(--c-modal--close-right);
+  top: var(--c-modal--close-top);
+  background-color: transparent;
+  border: none;
+  color: var(--c-modal--close-color);
+  line-height: 1;
+  font-size: var(--c-modal--close-size);
+  transition: var(--c-modal--close-transition);
+  
+  @mixin hover{
+    color: var(--c-modal--close-color-hover);
+  }
+
+  @media(hover:hover){
+    &:hover{
+      @include hover;
+    }
+  }
+  @media(hover:none){
+    &:active{
+      @include hover;
+    }
+  }
+}
+
+.c-modal__loading{
+  position: absolute;
+  left: calc(50% - (var(--c-modal--loading-size) / 2));
+  top: calc(50% - (var(--c-modal--loading-size) / 2));
+  width: var(--c-modal--loading-size);
+  height: var(--c-modal--loading-size);
+  border-radius: 50%;
+  background-image: conic-gradient(transparent, var(--c-modal--loading-color));
+  mask-image: radial-gradient(transparent 50%, #fff 50%);
+  animation-name: c-modal-loading;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transition: .4s;
+  content: "";
+
+  &[data-state="complete"]{
+    opacity: 0;
+  }
+}
+
+@keyframes c-modal-loading{
+  from{
+    rotate: 0;
+  }
+  to{
+    rotate: 360deg;
+  }
+}
