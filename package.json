@@ -1,0 +1,48 @@
+{
+  "name": "syg-modal-dialog",
+  "version": "2.0.0",
+  "description": "<dialog>要素を使ったLightbox風モーダルダイアログライブラリ",
+  "main": "./dist/syg-modal-dialog.umd.js",
+  "module": "./dist/syg-modal-dialog.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/syg-modal-dialog.es.js",
+      "require": "./dist/syg-modal-dialog.umd.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "modal",
+    "dialog",
+    "lightbox",
+    "youtube",
+    "image",
+    "typescript"
+  ],
+  "author": "sygnas",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sygnas/syg-modal-dialog.git"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "sass": "^1.83.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vite-plugin-dts": "^4.3.0"
+  }
+}

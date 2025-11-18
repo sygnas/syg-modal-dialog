@@ -1,0 +1,17 @@
+# ソースファイル
+src/
+demo/
+memory-bank/
+
+# 設定ファイル
+*.config.ts
+tsconfig.json
+
+# 開発環境
+node_modules/
+.vscode/
+.DS_Store
+
+# その他
+*.log
+*.tgz
