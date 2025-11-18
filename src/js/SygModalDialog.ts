@@ -3,6 +3,7 @@
  *
  */
 
+import '../css/syg-modal-dialog.scss';
 import { SygModalUI } from './SygModalUI';
 import type { TModalDialogType, TModalDialogOption } from './types';
 import { loadYoutube, loadImage, loadAjax, loadSelector, loadHtml, type ImageDragListeners } from './loaders';
@@ -39,20 +40,22 @@ export class SygModalDialog {
           if (matchedElement) {
             e.preventDefault();
 
-            // src の取得
+            // src の取得（data-syg-modal-src 優先、なければ href）
             let src = matchedElement.getAttribute('data-syg-modal-src');
             if (!src && matchedElement.tagName === 'A') {
-              src = (matchedElement as HTMLAnchorElement).href;
-            }
-
-            if (!src) {
-              console.error('data-syg-modal-src または href が指定されていません');
-              return;
+              const anchor = matchedElement as HTMLAnchorElement;
+              // hrefが#で始まる場合はhashを使用（完全なURLにならないように）
+              src = anchor.getAttribute('href') || anchor.href;
             }
 
             // type の取得
             const typeAttr = matchedElement.getAttribute('data-syg-modal');
             const type = typeAttr && typeAttr !== '' ? (typeAttr as TModalDialogType) : undefined;
+
+            if (!src) {
+              console.error('data-syg-modal-src または href が指定されていません');
+              return;
+            }
 
             this.showModal({
               ...options,
