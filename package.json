@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && vite build --config vite.config.css.js",
+    "build": "tsc && vite build && vite build --config vite.config.css.ts",
     "preview": "vite preview",
     "prepublishOnly": "npm run build"
   },
