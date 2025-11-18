@@ -17,7 +17,7 @@ YouTube動画、画像、Ajax取得コンテンツ、ページ内要素、HTML�
 ## インストール
 
 ```bash
-npm install syg-modal-dialog
+npm install @sygnas/modal-dialog
 ```
 
 ## 基本的な使い方
@@ -42,6 +42,7 @@ npm install syg-modal-dialog
 
 ```typescript
 import { SygModalDialog } from 'syg-modal-dialog';
+import '@sygnas/modal-dialog/style.css';
 
 // 要素をバインド
 SygModalDialog.bind('[data-syg-modal]');

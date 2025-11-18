@@ -1,5 +1,5 @@
 {
-  "name": "syg-modal-dialog",
+  "name": "@sygnas/modal-dialog",
   "version": "2.0.0",
   "description": "<dialog>要素を使ったLightbox風モーダルダイアログライブラリ",
   "main": "./dist/syg-modal-dialog.umd.js",
@@ -11,7 +11,7 @@
       "import": "./dist/syg-modal-dialog.es.js",
       "require": "./dist/syg-modal-dialog.umd.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/modal-dialog.css"
   },
   "files": [
     "dist",
