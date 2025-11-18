@@ -1,6 +1,7 @@
 
 // 以下はフレームワークとしての初期値（theme系を優先）
 .c-modal{
+  // .c-modal
   --c-modal--color: var(--c-modal--theme-color, inherit);
   --c-modal--bg-color: var(--c-modal--theme-bg-color, transparent);
   --c-modal--youtube-width: var(--c-modal--theme-youtube-width, 800px);
@@ -10,14 +11,30 @@
   --c-modal--border: var(--c-modal--theme-border, none);
   --c-modal--duration: var(--c-modal--theme-duration, .2s);
   --c-modal--backdrop-bg-color: var(--c-modal--theme-backdrop-bg-color, rgba(0, 0, 0, 0.8));
+  // .c-modal__close-btn
   --c-modal--close-right: var(--c-modal--theme-close-right, 1rem);
   --c-modal--close-top: var(--c-modal--theme-close-top, 0);
   --c-modal--close-size: var(--c-modal--theme-close-size, 4rem);
+  --c-modal--close-border: var(--c-modal--theme-close-border, none);
+  --c-modal--close-bg-color: var(--c-modal--theme-close-bg-color, transparent);
   --c-modal--close-color: var(--c-modal--theme-close-color, #fff);
   --c-modal--close-color-hover: var(--c-modal--theme-close-color-hover, var(--root-color_green));
   --c-modal--close-transition: var(--c-modal--theme-close-transition, .2s);
-  --c-modal--loading-size: var(--c-modal--theme-loading-size, 2rem);
+  // .c-modal__loading
+  --c-modal--loading-width: var(--c-modal--theme-loading-width, 2rem);
+  --c-modal--loading-height: var(--c-modal--theme-loading-height, 2rem);
   --c-modal--loading-color: var(--c-modal--theme-loading-color, #fff);
+  --c-modal--loading-bg-color: var(--c-modal--theme-loading-bg-color, transparent);
+  --c-modal--loading-border: var(--c-modal--theme-loading-border, none);
+  --c-modal--loading-radius: var(--c-modal--theme-loading-radius, 50%);
+  --c-modal--loading-bg-image: var(--c-modal--theme-loading-bg-image, conic-gradient(transparent, var(--c-modal--loading-color)));
+  --c-modal--loading-mask-image: var(--c-modal--theme-loading-mask-image, radial-gradient(transparent 50%, #fff 50%));
+  --c-modal--loading-animation-name: var(--c-modal--theme-loading-animation-name, c-modal-loading);
+  --c-modal--loading-animation-duration: var(--c-modal--theme-loading-animation-duration, 1s);
+  --c-modal--loading-animation-timing: var(--c-modal--theme-loading-animation-timing, linear);
+  --c-modal--loading-animation-count: var(--c-modal--theme-loading-animation-count, infinite);
+  --c-modal--loading-transition: var(--c-modal--theme-loading-transition, .4s);
+
 }
 
 .c-modal{
@@ -110,8 +127,8 @@
   position: fixed;
   right: var(--c-modal--close-right);
   top: var(--c-modal--close-top);
-  background-color: transparent;
-  border: none;
+  background-color: var(--c-modal--close-bg-color);
+  border: var(--c-modal--close-border);
   color: var(--c-modal--close-color);
   line-height: 1;
   font-size: var(--c-modal--close-size);
@@ -135,18 +152,18 @@
 
 .c-modal__loading{
   position: absolute;
-  left: calc(50% - (var(--c-modal--loading-size) / 2));
-  top: calc(50% - (var(--c-modal--loading-size) / 2));
-  width: var(--c-modal--loading-size);
-  height: var(--c-modal--loading-size);
-  border-radius: 50%;
-  background-image: conic-gradient(transparent, var(--c-modal--loading-color));
-  mask-image: radial-gradient(transparent 50%, #fff 50%);
-  animation-name: c-modal-loading;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  transition: .4s;
+  left: calc(50% - (var(--c-modal--loading-width) / 2));
+  top: calc(50% - (var(--c-modal--loading-height) / 2));
+  width: var(--c-modal--loading-width);
+  height: var(--c-modal--loading-height);
+  border-radius: var(--c-modal--loading-radius);
+  background-image: var(--c-modal--loading-bg-image);
+  mask-image: var(--c-modal--loading-mask-image);
+  animation-name: var(--c-modal--loading-animation-name);
+  animation-duration: var(--c-modal--loading-animation-duration);
+  animation-timing-function: var(--c-modal--loading-animation-timing);
+  animation-iteration-count: var(--c-modal--loading-animation-count);
+  transition: var(--c-modal--loading-transition);
   content: "";
 
   &[data-state="complete"]{

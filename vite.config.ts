@@ -10,18 +10,7 @@ export default defineConfig({
       fileName: (format) => `syg-modal-dialog.${format}.js`,
       formats: ['es', 'umd'],
     },
-    rollupOptions: {
-      output: {
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') {
-            return 'style.css';
-          }
-          return assetInfo.name || '';
-        },
-      },
-    },
     sourcemap: true,
-    cssCodeSplit: false,
   },
   css: {
     preprocessorOptions: {
@@ -38,7 +27,4 @@ export default defineConfig({
       rollupTypes: true,
     }),
   ],
-  server: {
-    open: '/demo/index.html',
-  },
 });

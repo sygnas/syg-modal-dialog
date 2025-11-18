@@ -3,7 +3,7 @@
  *
  */
 
-import '../css/syg-modal-dialog.scss';
+// import '../css/modal-dialog.scss';
 import { SygModalUI } from './SygModalUI';
 import type { TModalDialogType, TModalDialogOption } from './types';
 import { loadYoutube, loadImage, loadAjax, loadSelector, loadHtml, type ImageDragListeners } from './loaders';
@@ -189,6 +189,9 @@ export class SygModalDialog {
     const content = this.currentModalUI.getContent();
     const dialog = this.currentModalUI.getDialog();
     const container = this.currentModalUI.getContainer();
+
+    // 既存のコンテンツをクリア
+    content.innerHTML = '';
 
     // ローディング開始
     this.currentModalUI.setLoadingState('loading');
