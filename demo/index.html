@@ -169,9 +169,12 @@
   <div class="demo-section">
     <h2>📄 セレクタでページ内要素を表示</h2>
     <p>ページ内の非表示要素をモーダルで表示します。</p>
-    <button class="demo-button" data-syg-modal="selector" data-syg-modal-src="#content1">
-      コンテンツ 1
-    </button>
+    <a class="demo-button" data-syg-modal="selector" href="#content1">
+      A要素方式 ID取得
+    </a>
+    <a class="demo-button" data-syg-modal="selector" href=".content2">
+      A要素方式 Class取得
+    </a>
     <button class="demo-button" data-syg-modal="selector" data-syg-modal-src="#gallery">
       ギャラリー
     </button>
@@ -204,6 +207,14 @@
         <li>項目 2</li>
         <li>項目 3</li>
       </ul>
+    </div>
+  </div>
+
+  <div class="hidden-content content2">
+    <div style="padding: 20px;">
+      <h3>📝 サンプルコンテンツ</h3>
+      <p>これはページ内の非表示要素です。</p>
+      <p>セレクタを使って表示しています。</p>
     </div>
   </div>
 
