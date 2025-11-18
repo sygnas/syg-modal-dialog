@@ -150,6 +150,10 @@ SygModalDialog.showModal({
 <button data-syg-modal="selector" data-syg-modal-src="#hidden-content">
   コンテンツを開く
 </button>
+
+<a data-syg-modal="selector" href="#hidden-content">
+  コンテンツを開く
+</a>
 ```
 
 ```typescript
@@ -328,88 +332,6 @@ SygModalDialog.bind('[data-syg-modal]', {
 });
 ```
 
-### 背景スクロール防止
-
-モーダル表示中は背景のスクロールが自動的に防止されます。
-
-### 閉じる方法
-
-モーダルは以下の方法で閉じることができます:
-
-1. 閉じるボタンをクリック
-2. 背景（オーバーレイ）をクリック
-3. ESCキー（ブラウザのデフォルト動作）
-
-## CSS
-
-基本的なスタイルの例:
-
-```css
-/* モーダル背景 */
-.c-modal {
-  border: none;
-  padding: 0;
-  max-width: 90vw;
-  max-height: 90vh;
-  background: transparent;
-}
-
-.c-modal::backdrop {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-/* コンテナ */
-.c-modal__container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* コンテンツ */
-.c-modal__content {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-}
-
-/* 閉じるボタン */
-.c-modal__close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-  padding: 10px 15px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-/* ローディング */
-.c-modal__loading {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.c-modal[data-state="loading"] .c-modal__loading {
-  display: block;
-}
-
-/* タイプ別スタイル */
-.c-modal[data-type="image"] .c-modal__content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.c-modal[data-type="youtube"] .c-modal__content iframe {
-  width: 100%;
-  height: 100%;
-}
-```
 
 ## アーキテクチャ
 
