@@ -38,6 +38,9 @@
     "type": "git",
     "url": "https://github.com/sygnas/syg-modal-dialog.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/node": "^22.10.1",
     "sass": "^1.83.0",

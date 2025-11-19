@@ -42,7 +42,6 @@ npm install @sygnas/modal-dialog
 
 ```typescript
 import { SygModalDialog } from 'syg-modal-dialog';
-import '@sygnas/modal-dialog/style.css';
 
 // 要素をバインド
 SygModalDialog.bind('[data-syg-modal]');
@@ -75,6 +74,21 @@ SygModalDialog.showModal({
   src: '#content',
   type: 'selector',
 });
+```
+
+## CSSの読み込み
+
+スタイルを変更するならCDN読み込みする方法が詳細度が低く一番ラクです。
+
+### CDNから
+```html
+<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@2.0.0/dist/style.css">
+```
+
+### JavaScriptから
+```js
+import { SygModalDialog } from 'syg-modal-dialog';
+import '@sygnas/modal-dialog/style.css';
 ```
 
 ## コンテンツタイプ
