@@ -5,7 +5,7 @@
 
 // import '../css/modal-dialog.scss';
 import { SygModalUI } from './SygModalUI';
-import type { TModalDialogType, TModalDialogOption } from './types';
+import type { TModalDialogType, TModalDialogOption, TModalHistoryState } from './types';
 import { loadYoutube, loadImage, loadAjax, loadSelector, loadHtml, type ImageDragListeners } from './loaders';
 
 export type { TModalDialogOption, TModalDialogType };
@@ -15,6 +15,10 @@ export class SygModalDialog {
   private static boundSelectors: Set<string> = new Set();
   private static delegateListener: ((e: Event) => void) | null = null;
   private static imageDragListeners: ImageDragListeners | null = null;
+  private static popstateListener: ((e: PopStateEvent) => void) | null = null;
+  private static useHistory: boolean = false;
+  private static isRestoringFromHistory: boolean = false;
+  private static currentOptions: TModalDialogOption = {};
 
   /**
    * 要素をバインドしてクリックイベントを設定（イベント委譲方式）
@@ -27,6 +31,15 @@ export class SygModalDialog {
     }
 
     this.boundSelectors.add(selector);
+
+    // 履歴機能の設定を保存
+    if (options.useHistory !== undefined) {
+      this.useHistory = options.useHistory;
+      this.currentOptions = options;
+    }
+
+    // popstateリスナーの設定
+    this.setupPopstateListener();
 
     // 初回のみdocumentにイベントリスナーを設定
     if (!this.delegateListener) {
@@ -57,6 +70,9 @@ export class SygModalDialog {
               return;
             }
 
+            // ユーザーの能動的なアクションなので履歴モードを解除
+            this.isRestoringFromHistory = false;
+
             this.showModal({
               ...options,
               src,
@@ -70,6 +86,38 @@ export class SygModalDialog {
 
       document.addEventListener('click', this.delegateListener);
     }
+  }
+
+  /**
+   * popstateリスナーをセットアップ
+   */
+  private static setupPopstateListener(): void {
+    if (this.popstateListener) return;
+
+    this.popstateListener = (e: PopStateEvent) => {
+      const state = e.state as TModalHistoryState | null;
+
+      // 履歴から復元中フラグを立てる
+      this.isRestoringFromHistory = true;
+
+      // モーダル関連の履歴でない場合
+      if (!state || !state.sygModal) {
+        // モーダルが開いている場合は閉じる
+        if (this.currentModalUI && this.currentModalUI.isOpen()) {
+          this.closeModal();
+        }
+        return;
+      }
+
+      // 履歴から復元
+      this.showModal({
+        src: state.src,
+        type: state.type,
+        ...state.options,
+      });
+    };
+
+    window.addEventListener('popstate', this.popstateListener);
   }
 
   /**
@@ -102,12 +150,22 @@ export class SygModalDialog {
       return;
     }
 
+    // オプションを保存
+    this.currentOptions = options;
+
     // SygModalUIを作成
     this.currentModalUI = new SygModalUI({
       ...options,
       onClose: () => {
         // ドラッグイベントリスナーをクリーンアップ
         this.cleanupImageDragListeners();
+        
+        // 履歴から復元していない場合、かつ手動で閉じた場合は履歴を戻す
+        if ((this.useHistory || options.useHistory) && !this.isRestoringFromHistory) {
+          // 手動で閉じた場合は履歴を戻す
+          window.history.back();
+        }
+        this.isRestoringFromHistory = false;
         
         // onCloseコールバック
         if (options.onClose) {
@@ -127,6 +185,9 @@ export class SygModalDialog {
 
     // モーダルを開く
     this.currentModalUI.open();
+
+    // 履歴に追加
+    this.pushHistory(src || '', contentType, options);
 
     // コンテンツを読み込み
     this.loadContent(src || '', contentType, options);
@@ -178,6 +239,29 @@ export class SygModalDialog {
     window.removeEventListener('resize', onResizeHandler);
 
     this.imageDragListeners = null;
+  }
+
+  /**
+   * 履歴に状態を追加
+   */
+  private static pushHistory(src: string, type: TModalDialogType, options: TModalDialogOption): void {
+    if (!this.isRestoringFromHistory && (this.useHistory || options.useHistory) && type !== 'html' && src) {
+      const historyState: TModalHistoryState = {
+        sygModal: true,
+        src,
+        type,
+        options: {
+          closeButtonContent: options.closeButtonContent || this.currentOptions.closeButtonContent,
+          loadingContent: options.loadingContent || this.currentOptions.loadingContent,
+          modalClass: options.modalClass || this.currentOptions.modalClass,
+          containerClass: options.containerClass || this.currentOptions.containerClass,
+          contentClass: options.contentClass || this.currentOptions.contentClass,
+          closeBtnClass: options.closeBtnClass || this.currentOptions.closeBtnClass,
+          loadingClass: options.loadingClass || this.currentOptions.loadingClass,
+        },
+      };
+      window.history.pushState(historyState, '', window.location.href);
+    }
   }
 
   /**
@@ -241,7 +325,19 @@ export class SygModalDialog {
     // タイプを更新
     this.currentModalUI.setType(type);
 
+    // 履歴に追加
+    this.pushHistory(src, type, options);
+
     // コンテンツを読み込み
     this.loadContent(src, type, options);
+  }
+
+  /**
+   * モーダルを閉じる
+   */
+  private static closeModal(): void {
+    if (this.currentModalUI) {
+      this.currentModalUI.close();
+    }
   }
 }

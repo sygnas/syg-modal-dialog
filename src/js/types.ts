@@ -37,10 +37,26 @@ export type TModalDialogOption = {
   closeBtnClass?: string;
   /** ローディングのクラス（デフォルト: 'c-modal__loading'） */
   loadingClass?: string;
+  /** ブラウザバック対応を有効にする（デフォルト: false） */
+  useHistory?: boolean;
   /** 開いた時のコールバック */
   onOpen?: () => void;
   /** 閉じた時のコールバック */
   onClose?: () => void;
+};
+
+/**
+ * History API用の状態データ
+ */
+export type TModalHistoryState = {
+  /** モーダルの識別子 */
+  sygModal: boolean;
+  /** コンテンツのURL/セレクタ */
+  src: string;
+  /** コンテンツタイプ */
+  type: TModalDialogType;
+  /** オプション（history用に保存が必要なもの） */
+  options?: Partial<TModalDialogOption>;
 };
 
 /**
