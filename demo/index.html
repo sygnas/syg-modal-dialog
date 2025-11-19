@@ -282,6 +282,7 @@
       // data-syg-modal属性の要素をバインド
       SygModalDialog.bind("[data-syg-modal]", {
         closeButtonContent: "✕",
+        useHistory: true, // ブラウザバック対応を有効化
         onOpen: () => console.log("モーダルが開きました"),
         onClose: () => console.log("モーダルが閉じました"),
       });

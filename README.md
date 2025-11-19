@@ -252,6 +252,9 @@ type TModalDialogOption = {
   closeBtnClass?: string;     // デフォルト: 'c-modal__close-btn'
   loadingClass?: string;      // デフォルト: 'c-modal__loading'
   
+  // ブラウザバック対応を有効にする（デフォルト: false）
+  useHistory?: boolean;
+  
   // コールバック
   onOpen?: () => void;        // 開いた時
   onClose?: () => void;       // 閉じた時
@@ -311,6 +314,26 @@ document.body.appendChild(newButton);
   ギャラリーを開く
 </button>
 ```
+
+### ブラウザバック対応
+
+`useHistory: true`を設定すると、ブラウザの戻るボタンでモーダルの履歴を遡れるようになります。
+
+```typescript
+SygModalDialog.bind('[data-syg-modal]', {
+  useHistory: true,
+});
+```
+
+**動作:**
+- モーダルを開くと履歴に追加されます
+- モーダル内でコンテンツを切り替えても履歴に追加されます
+- ブラウザバックで前のコンテンツに戻れます
+- さらにブラウザバックでモーダルが閉じます
+
+**制限事項:**
+- `type="html"`は履歴に保存されません（保存内容が複雑なため）
+- URLは変更されません（VueRouterなどとの競合を避けるため）
 
 ### ローディング状態
 
@@ -422,6 +445,9 @@ SygModalDialog.showModal(options);
 MIT
 
 ## 変更履歴
+
+### v2.1.0
+- `useHistory`を追加
 
 ### v2.0.0 (Phase 1)
 - `type="html"`を追加
