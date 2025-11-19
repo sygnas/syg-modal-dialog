@@ -139,15 +139,15 @@ export class SygModalDialog {
     if (/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(src)) {
       return 'youtube';
     }
-    if (/^[.#]/.test(src)) {
-      return 'selector';
-    }
+    // if (/^[.#]/.test(src)) {
+    //   return 'selector';
+    // }
     if (/\.(jpe?g|png|gif|webp)$/i.test(src)) {
       return 'image';
     }
-    if (/^https?:\/\//.test(src)) {
-      return 'ajax';
-    }
+    // if (/^https?:\/\//.test(src)) {
+    //   return 'ajax';
+    // }
     return null;
   }
 
