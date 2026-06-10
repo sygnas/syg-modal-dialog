@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SygModalDialog - デモ</title>
-    <link rel="stylesheet" type="text/css" href="/src/css/style.scss">
 
     <style>
       * {
@@ -277,7 +276,8 @@
     <!-- ライブラリの読み込み -->
     <script type="module">
       import { SygModalDialog } from "../src/js/SygModalDialog.ts";
-      // import '../src/css/modal-dialog.scss';
+      // モーダルのCSS（SCSS）を読み込む。ViteがコンパイルしてStyleを注入する
+      import "../src/css/style.scss";
 
       // data-syg-modal属性の要素をバインド
       SygModalDialog.bind("[data-syg-modal]", {

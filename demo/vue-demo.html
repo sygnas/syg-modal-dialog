@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SygModalUI.vue - Demo</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        line-height: 1.6;
+      }
+      h1 {
+        color: #2c3e50;
+        border-bottom: 2px solid #42b983;
+        padding-bottom: 0.5rem;
+      }
+      h2 {
+        color: #42b983;
+        margin-top: 2rem;
+      }
+      .demo-section {
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      button {
+        background: #42b983;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin: 0.5rem 0.5rem 0.5rem 0;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #35a372;
+      }
+      .code-block {
+        background: #282c34;
+        color: #abb2bf;
+        padding: 1rem;
+        border-radius: 4px;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+      .modal-content {
+        padding: 1rem;
+      }
+      .modal-content h2 {
+        margin-top: 0;
+      }
+      .form-group {
+        margin: 1rem 0;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-family: inherit;
+      }
+      .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      .counter {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #42b983;
+        margin: 1rem 0;
+      }
+      .todo-list {
+        list-style: none;
+        padding: 0;
+      }
+      .todo-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        background: #fff;
+        border-radius: 4px;
+      }
+      .todo-item.completed {
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+      .todo-item input[type="checkbox"] {
+        margin-right: 0.5rem;
+      }
+      .info-box {
+        background: #e7f3ff;
+        border-left: 4px solid #2196f3;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+      .c-modal {
+        --c-modal--theme-max-width: 600px;
+        --c-modal--theme-padding: 2rem;
+        --c-modal--theme-bg-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>🎭 SygModalUI.vue - デモ</h1>
+
+      <p>このページは、SygModalUI.vueのVueコンポーネントのデモです。</p>
+
+      <div class="info-box">
+        <strong>💡 ポイント:</strong>
+        SygModalUI.vueは、リアクティブなHTMLコンテンツの表示に特化したコンポーネントです。
+        画像のLightboxやYouTube動画の埋め込みには、TypeScript版の<code>SygModalDialog</code>クラスを使用してください。
+      </div>
+
+      <!-- パターン1: フォーム -->
+      <div class="demo-section">
+        <h2>📝 パターン1: お問い合わせフォーム</h2>
+        <p>v-modelで開閉制御、slotでリアクティブコンテンツを表示</p>
+
+        <button @click="isFormOpen = true">フォームを開く</button>
+
+        <syg-modal-ui v-model="isFormOpen">
+          <div class="modal-content">
+            <h2>お問い合わせフォーム</h2>
+            <div class="form-group">
+              <label for="name">お名前</label>
+              <input
+                id="name"
+                v-model="formData.name"
+                type="text"
+                placeholder="山田太郎"
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">メールアドレス</label>
+              <input
+                id="email"
+                v-model="formData.email"
+                type="email"
+                placeholder="example@example.com"
+              />
+            </div>
+            <div class="form-group">
+              <label for="message">メッセージ</label>
+              <textarea
+                id="message"
+                v-model="formData.message"
+                placeholder="お問い合わせ内容をご記入ください"
+              ></textarea>
+            </div>
+            <p><strong>入力内容:</strong></p>
+            <p>名前: {{ formData.name }}</p>
+            <p>メール: {{ formData.email }}</p>
+            <p>メッセージ: {{ formData.message }}</p>
+            <button @click="submitForm">送信</button>
+          </div>
+        </syg-modal-ui>
+      </div>
+
+      <!-- パターン2: カウンター -->
+      <div class="demo-section">
+        <h2>🔢 パターン2: リアクティブなカウンター</h2>
+        <p>モーダル内のボタンクリックで値が変化する例</p>
+
+        <button @click="isCounterOpen = true">カウンターを開く</button>
+
+        <syg-modal-ui v-model="isCounterOpen">
+          <div class="modal-content">
+            <h2>カウンター</h2>
+            <div class="counter">{{ counter }}</div>
+            <button @click="counter++">+1</button>
+            <button @click="counter += 10">+10</button>
+            <button @click="counter--">-1</button>
+            <button @click="counter = 0">リセット</button>
+          </div>
+        </syg-modal-ui>
+      </div>
+
+      <!-- パターン3: 記事表示 -->
+      <div class="demo-section">
+        <h2>📰 パターン3: 動的コンテンツ</h2>
+        <p>リアクティブなデータをモーダルで表示</p>
+
+        <button @click="isArticleOpen = true">記事を見る</button>
+
+        <syg-modal-ui
+          v-model="isArticleOpen"
+          @open="onModalOpen"
+          @close="onModalClose"
+        >
+          <div class="modal-content">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.content }}</p>
+            <div class="counter">👍 {{ likes }}</div>
+            <button @click="likes++">いいね</button>
+            <button @click="likes = 0">リセット</button>
+          </div>
+        </syg-modal-ui>
+      </div>
+
+      <!-- パターン4: TODOリスト -->
+      <div class="demo-section">
+        <h2>✅ パターン4: TODOリスト</h2>
+        <p>リスト操作もリアクティブに動作</p>
+
+        <button @click="isTodoOpen = true">TODOを開く</button>
+
+        <syg-modal-ui v-model="isTodoOpen">
+          <div class="modal-content">
+            <h2>TODOリスト</h2>
+            <div class="form-group">
+              <input
+                v-model="newTodo"
+                type="text"
+                placeholder="新しいTODOを入力"
+                @keyup.enter="addTodo"
+              />
+              <button @click="addTodo" style="margin-top: 0.5rem">追加</button>
+            </div>
+            <ul class="todo-list">
+              <li
+                v-for="(todo, index) in todos"
+                :key="index"
+                :class="{ 'todo-item': true, 'completed': todo.completed }"
+              >
+                <input type="checkbox" v-model="todo.completed" />
+                <span style="flex: 1">{{ todo.text }}</span>
+                <button
+                  @click="removeTodo(index)"
+                  style="padding: 0.25rem 0.5rem; font-size: 0.8rem"
+                >
+                  削除
+                </button>
+              </li>
+            </ul>
+          </div>
+        </syg-modal-ui>
+      </div>
+
+      <!-- イベントログ -->
+      <div class="demo-section">
+        <h2>📋 イベントログ</h2>
+        <div class="code-block">
+          <div v-if="eventLog.length === 0">イベントなし</div>
+          <div v-for="(event, index) in eventLog" :key="index">{{ event }}</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { createApp, ref } from "vue";
+      import SygModalUI from "../src/vue/SygModalUI.vue";
+      // モーダルのCSS（SCSS）を読み込む。ViteがコンパイルしてStyleを注入する
+      import "../src/css/style.scss";
+
+      createApp({
+        components: {
+          "syg-modal-ui": SygModalUI,
+        },
+        setup() {
+          // パターン1: フォーム
+          const isFormOpen = ref(false);
+          const formData = ref({
+            name: "",
+            email: "",
+            message: "",
+          });
+
+          const submitForm = () => {
+            alert(
+              `送信されました:\n名前: ${formData.value.name}\nメール: ${formData.value.email}\nメッセージ: ${formData.value.message}`
+            );
+            isFormOpen.value = false;
+            // フォームをリセット
+            formData.value = { name: "", email: "", message: "" };
+          };
+
+          // パターン2: カウンター
+          const isCounterOpen = ref(false);
+          const counter = ref(0);
+
+          // パターン3: 記事
+          const isArticleOpen = ref(false);
+          const article = ref({
+            title: "Vueコンポーネントの使い方",
+            content:
+              "SygModalUI.vueを使うと、リアクティブなコンテンツを簡単にモーダル表示できます。フォーム、カウンター、TODOリストなど、あらゆるVueコンポーネントをモーダル内で使用できます。",
+          });
+          const likes = ref(0);
+
+          // パターン4: TODOリスト
+          const isTodoOpen = ref(false);
+          const newTodo = ref("");
+          const todos = ref([
+            { text: "SygModalUI.vueを試す", completed: true },
+            { text: "リアクティブな機能を確認", completed: false },
+            { text: "プロジェクトに導入", completed: false },
+          ]);
+
+          const addTodo = () => {
+            if (newTodo.value.trim()) {
+              todos.value.push({
+                text: newTodo.value,
+                completed: false,
+              });
+              newTodo.value = "";
+            }
+          };
+
+          const removeTodo = (index) => {
+            todos.value.splice(index, 1);
+          };
+
+          // イベントログ
+          const eventLog = ref([]);
+
+          const onModalOpen = () => {
+            const timestamp = new Date().toLocaleTimeString();
+            eventLog.value.unshift(`[${timestamp}] モーダルが開かれました`);
+          };
+
+          const onModalClose = () => {
+            const timestamp = new Date().toLocaleTimeString();
+            eventLog.value.unshift(`[${timestamp}] モーダルが閉じられました`);
+          };
+
+          return {
+            isFormOpen,
+            formData,
+            submitForm,
+            isCounterOpen,
+            counter,
+            isArticleOpen,
+            article,
+            likes,
+            isTodoOpen,
+            newTodo,
+            todos,
+            addTodo,
+            removeTodo,
+            eventLog,
+            onModalOpen,
+            onModalClose,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 .claude/
 test/
+demo/dist/
 
 # Dependencies
 node_modules/
