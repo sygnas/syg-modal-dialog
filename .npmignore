@@ -1,7 +1,7 @@
 # ソースファイル
 src/
 demo/
-memory-bank/
+.claude/
 
 # 設定ファイル
 *.config.ts

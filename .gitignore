@@ -1,4 +1,5 @@
-memory-bank/
+.claude/
+test/
 
 # Dependencies
 node_modules/
