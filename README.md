@@ -57,7 +57,7 @@ SygModalDialog.bind('[data-syg-modal]');
 
 // オプション付きでバインド
 SygModalDialog.bind('[data-syg-modal]', {
-  closeButton: '閉じる',
+  closeButtonContent: '閉じる',
   onOpen: () => console.log('opened'),
   onClose: () => console.log('closed'),
 });
@@ -91,7 +91,7 @@ SygModalDialog.showModal({
 
 ### CDNから
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@2.0.0/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.0.0/dist/style.css">
 ```
 
 ### JavaScriptから
@@ -455,6 +455,9 @@ SygModalDialog.showModal(options);
 MIT
 
 ## 変更履歴
+
+### v3.0.0
+- Vue版を追加
 
 ### v2.1.0
 - `useHistory`を追加
