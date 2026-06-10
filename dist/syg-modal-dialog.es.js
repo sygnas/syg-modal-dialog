@@ -1,7 +1,7 @@
-const X = class X {
+const x = class x {
   constructor(t = {}) {
     this.options = {
-      ...X.defaultOptions,
+      ...x.defaultOptions,
       ...t
     }, this.dialog = this.createDialog(), this.container = this.dialog.querySelector("#syg-modal-container"), this.content = this.dialog.querySelector("#syg-modal-content"), this.loading = this.dialog.querySelector("#syg-modal-loading"), this.setupEventListeners();
   }
@@ -19,8 +19,8 @@ const X = class X {
     r.method = "dialog";
     const a = document.createElement("button");
     a.type = "submit", a.className = this.options.closeBtnClass, a.innerHTML = this.options.closeButtonContent, r.appendChild(a);
-    const s = document.createElement("div");
-    return s.id = "syg-modal-loading", s.className = this.options.loadingClass, s.setAttribute("data-state", "init"), s.innerHTML = this.options.loadingContent, n.appendChild(e), t.appendChild(n), t.appendChild(r), t.appendChild(s), t;
+    const o = document.createElement("div");
+    return o.id = "syg-modal-loading", o.className = this.options.loadingClass, o.setAttribute("data-state", "init"), o.innerHTML = this.options.loadingContent, n.appendChild(e), t.appendChild(n), t.appendChild(r), t.appendChild(o), t;
   }
   /**
    * イベントリスナーを設定
@@ -99,7 +99,7 @@ const X = class X {
     this.dialog.parentElement && this.dialog.remove();
   }
 };
-X.defaultOptions = {
+x.defaultOptions = {
   closeButtonContent: "×",
   loadingContent: "",
   modalClass: "c-modal",
@@ -108,7 +108,7 @@ X.defaultOptions = {
   closeBtnClass: "c-modal__close-btn",
   loadingClass: "c-modal__loading"
 };
-let W = X;
+let F = x;
 async function et(c, t) {
   const n = nt(c);
   if (!n)
@@ -120,73 +120,73 @@ function nt(c) {
   let t = c.match(/[?&]v=([^&]+)/);
   return t != null && t[1] || (t = c.match(/youtu\.be\/([^?&]+)/), t != null && t[1]) || (t = c.match(/youtube\.com\/embed\/([^?&]+)/), t != null && t[1]) ? t[1] : null;
 }
-async function ot(c, t, n, e) {
+async function st(c, t, n, e) {
   return new Promise((r, a) => {
-    const s = document.createElement("img");
-    s.style.cursor = "pointer", s.onload = () => {
-      const l = s.naturalWidth, d = s.naturalHeight, m = n.clientWidth, C = n.clientHeight, $ = l / d, G = m / C;
-      let y, E;
-      $ > G ? (y = Math.min(m, l), E = y / $) : (E = Math.min(C, d), y = E * $), e.style.width = `${y}px`, e.style.height = `${E}px`, e.style.left = `${(m - y) / 2}px`, e.style.top = `${(C - E) / 2}px`, e.style.transformOrigin = "0 0";
-      let g = !1, v = 0, w = 0, M = 1, L = !1, I = 0, D = 0, S = 0, k = 0, H = 0, U = 0, h = null, Y = 0, x = 0, N = 0;
-      const A = () => {
-        e.style.transform = `matrix(${M}, 0, 0, ${M}, ${v}, ${w})`;
-      }, O = () => {
-        v = Y, w = x, A(), h = null;
-      }, q = (o) => {
-        Date.now() - N < 500 || o.target !== e && o.target !== s || (L = !0, S = o.clientX, k = o.clientY, I = o.clientX, D = o.clientY, H = v, U = w, e.style.cursor = g ? "grabbing" : "pointer");
-      }, F = (o) => {
-        if (o.target !== e && o.target !== s || o.touches.length !== 1) return;
-        N = Date.now(), o.preventDefault();
-        const i = o.touches[0];
-        i && (L = !0, S = i.clientX, k = i.clientY, I = i.clientX, D = i.clientY, H = v, U = w);
-      }, B = (o) => {
+    const o = document.createElement("img");
+    o.style.cursor = "pointer", o.onload = () => {
+      const l = o.naturalWidth, d = o.naturalHeight, g = n.clientWidth, M = n.clientHeight, X = l / d, J = g / M;
+      let C, E;
+      X > J ? (C = Math.min(g, l), E = C / X) : (E = Math.min(M, d), C = E * X), e.style.width = `${C}px`, e.style.height = `${E}px`, e.style.left = `${(g - C) / 2}px`, e.style.top = `${(M - E) / 2}px`, e.style.transformOrigin = "0 0";
+      let p = !1, w = 0, v = 0, b = 1, L = !1, I = 0, T = 0, $ = 0, R = 0, D = 0, U = 0, m = null, O = 0, Y = 0, B = 0;
+      const k = () => {
+        e.style.transform = `matrix(${b}, 0, 0, ${b}, ${w}, ${v})`;
+      }, S = () => {
+        w = O, v = Y, k(), m = null;
+      }, W = (s) => {
+        Date.now() - B < 500 || s.target !== e && s.target !== o || (L = !0, $ = s.clientX, R = s.clientY, I = s.clientX, T = s.clientY, D = w, U = v, e.style.cursor = p ? "grabbing" : "pointer");
+      }, N = (s) => {
+        if (s.target !== e && s.target !== o || s.touches.length !== 1) return;
+        B = Date.now(), s.preventDefault();
+        const i = s.touches[0];
+        i && (L = !0, $ = i.clientX, R = i.clientY, I = i.clientX, T = i.clientY, D = w, U = v);
+      }, q = (s) => {
         if (!L) return;
-        const i = o.clientX - I, u = o.clientY - D;
-        g && (Y = H + i, x = U + u, h === null && (h = requestAnimationFrame(O)));
-      }, j = (o) => {
-        if (!L || o.touches.length !== 1) return;
-        const i = o.touches[0];
+        const i = s.clientX - I, u = s.clientY - T;
+        p && (O = D + i, Y = U + u, m === null && (m = requestAnimationFrame(S)));
+      }, z = (s) => {
+        if (!L || s.touches.length !== 1) return;
+        const i = s.touches[0];
         if (!i) return;
-        const u = i.clientX - I, T = i.clientY - D;
-        g && (o.preventDefault(), Y = H + u, x = U + T, h === null && (h = requestAnimationFrame(O)));
-      }, J = (o, i) => {
-        g = !0, M = l / y;
-        const u = n.getBoundingClientRect(), T = o - u.left, p = i - u.top, f = parseFloat(e.style.left), Q = parseFloat(e.style.top), V = T - f, tt = p - Q;
-        v = V * (1 - M), w = tt * (1 - M), e.style.cursor = "grab", A();
-      }, K = () => {
-        g = !1, M = 1, v = 0, w = 0, e.style.cursor = "pointer", A();
-      }, z = (o, i) => {
+        const u = i.clientX - I, H = i.clientY - T;
+        p && (s.preventDefault(), O = D + u, Y = U + H, m === null && (m = requestAnimationFrame(S)));
+      }, K = (s, i) => {
+        p = !0, b = l / C;
+        const u = n.getBoundingClientRect(), H = s - u.left, f = i - u.top, y = parseFloat(e.style.left), V = parseFloat(e.style.top), _ = H - y, tt = f - V;
+        w = _ * (1 - b), v = tt * (1 - b), e.style.cursor = "grab", k();
+      }, Q = () => {
+        p = !1, b = 1, w = 0, v = 0, e.style.cursor = "pointer", k();
+      }, P = (s, i) => {
         if (!L) return;
-        h !== null && (cancelAnimationFrame(h), h = null), Math.sqrt(
-          Math.pow(o - S, 2) + Math.pow(i - k, 2)
-        ) < 5 ? g ? K() : J(o, i) : (v = Y, w = x), L = !1, g && (e.style.cursor = "grab");
-      }, P = (o) => {
-        z(o.clientX, o.clientY);
+        m !== null && (cancelAnimationFrame(m), m = null), Math.sqrt(
+          Math.pow(s - $, 2) + Math.pow(i - R, 2)
+        ) < 5 ? p ? Q() : K(s, i) : (w = O, v = Y), L = !1, p && (e.style.cursor = "grab");
+      }, j = (s) => {
+        P(s.clientX, s.clientY);
       }, Z = () => {
-        if (g) return;
-        const o = n.clientWidth, i = n.clientHeight, u = l / d, T = o / i;
-        let p, f;
-        u > T ? (p = Math.min(o, l), f = p / u) : (f = Math.min(i, d), p = f * u), e.style.width = `${p}px`, e.style.height = `${f}px`, e.style.left = `${(o - p) / 2}px`, e.style.top = `${(i - f) / 2}px`, y = p, E = f;
-      }, R = (o) => {
+        if (p) return;
+        const s = n.clientWidth, i = n.clientHeight, u = l / d, H = s / i;
+        let f, y;
+        u > H ? (f = Math.min(s, l), y = f / u) : (y = Math.min(i, d), f = y * u), e.style.width = `${f}px`, e.style.height = `${y}px`, e.style.left = `${(s - f) / 2}px`, e.style.top = `${(i - y) / 2}px`, C = f, E = y;
+      }, A = (s) => {
         if (!L) return;
-        o.preventDefault();
-        const i = o.changedTouches[0];
-        i && z(i.clientX, i.clientY);
+        s.preventDefault();
+        const i = s.changedTouches[0];
+        i && P(i.clientX, i.clientY);
       };
-      e.addEventListener("mousedown", q), e.addEventListener("touchstart", F, { passive: !1 }), document.addEventListener("mousemove", B), document.addEventListener("touchmove", j, { passive: !1 }), document.addEventListener("mouseup", P), document.addEventListener("touchend", R), document.addEventListener("touchcancel", R), window.addEventListener("resize", Z), t.innerHTML = "", t.appendChild(s), r({
-        startDrag: q,
-        doDrag: B,
-        endDrag: P,
-        touchStart: F,
-        touchMove: j,
-        touchEnd: R,
+      e.addEventListener("mousedown", W), e.addEventListener("touchstart", N, { passive: !1 }), document.addEventListener("mousemove", q), document.addEventListener("touchmove", z, { passive: !1 }), document.addEventListener("mouseup", j), document.addEventListener("touchend", A), document.addEventListener("touchcancel", A), window.addEventListener("resize", Z), t.innerHTML = "", t.appendChild(o), r({
+        startDrag: W,
+        doDrag: q,
+        endDrag: j,
+        touchStart: N,
+        touchMove: z,
+        touchEnd: A,
         onResizeHandler: Z,
-        rafId: h
+        rafId: m
       });
-    }, s.onerror = () => a(new Error("画像の読み込みに失敗しました")), s.src = c;
+    }, o.onerror = () => a(new Error("画像の読み込みに失敗しました")), o.src = c;
   });
 }
-async function st(c, t) {
+async function ot(c, t) {
   const n = await fetch(c);
   if (!n.ok)
     throw new Error(`HTTP error! status: ${n.status}`);
@@ -202,37 +202,54 @@ function it(c, t) {
 function rt(c, t) {
   t.innerHTML = c;
 }
-const b = class b {
+const h = class h {
   /**
    * 要素をバインドしてクリックイベントを設定（イベント委譲方式）
    * 動的に追加された要素にも自動対応し、重複登録を防ぎます
    */
   static bind(t, n = {}) {
-    this.boundSelectors.has(t) || (this.boundSelectors.add(t), this.delegateListener || (this.delegateListener = (e) => {
+    this.boundSelectors.has(t) || (this.boundSelectors.add(t), n.useHistory !== void 0 && (this.useHistory = n.useHistory, this.currentOptions = n), this.setupPopstateListener(), this.delegateListener || (this.delegateListener = (e) => {
       const r = e.target;
       for (const a of this.boundSelectors) {
-        const s = r.closest(a);
-        if (s) {
+        const o = r.closest(a);
+        if (o) {
           e.preventDefault();
-          let l = s.getAttribute("data-syg-modal-src");
-          if (!l && s.tagName === "A") {
-            const C = s;
-            l = C.getAttribute("href") || C.href;
+          let l = o.getAttribute("data-syg-modal-src");
+          if (!l && o.tagName === "A") {
+            const M = o;
+            l = M.getAttribute("href") || M.href;
           }
-          const d = s.getAttribute("data-syg-modal"), m = d && d !== "" ? d : void 0;
+          const d = o.getAttribute("data-syg-modal"), g = d && d !== "" ? d : void 0;
           if (!l) {
             console.error("data-syg-modal-src または href が指定されていません");
             return;
           }
-          this.showModal({
+          this.isRestoringFromHistory = !1, this.showModal({
             ...n,
             src: l,
-            type: m
+            type: g
           });
           break;
         }
       }
     }, document.addEventListener("click", this.delegateListener)));
+  }
+  /**
+   * popstateリスナーをセットアップ
+   */
+  static setupPopstateListener() {
+    this.popstateListener || (this.popstateListener = (t) => {
+      const n = t.state;
+      if (this.isRestoringFromHistory = !0, !n || !n.sygModal) {
+        this.currentModalUI && this.currentModalUI.isOpen() && this.closeModal();
+        return;
+      }
+      this.showModal({
+        src: n.src,
+        type: n.type,
+        ...n.options
+      });
+    }, window.addEventListener("popstate", this.popstateListener));
   }
   /**
    * モーダルを表示
@@ -257,37 +274,59 @@ const b = class b {
       this.updateContent(n || "", t);
       return;
     }
-    this.currentModalUI = new W({
+    this.currentOptions = t, this.currentModalUI = new F({
       ...t,
       onClose: () => {
-        this.cleanupImageDragListeners(), t.onClose && t.onClose(), this.currentModalUI && (this.currentModalUI.destroy(), this.currentModalUI = null);
+        this.cleanupImageDragListeners(), (this.useHistory || t.useHistory) && !this.isRestoringFromHistory && window.history.back(), this.isRestoringFromHistory = !1, t.onClose && t.onClose(), this.currentModalUI && (this.currentModalUI.destroy(), this.currentModalUI = null);
       }
-    }), this.currentModalUI.setType(a), this.currentModalUI.open(), this.loadContent(n || "", a, t);
+    }), this.currentModalUI.setType(a), this.currentModalUI.open(), this.pushHistory(n || "", a, t), this.loadContent(n || "", a, t);
   }
   /**
    * コンテンツタイプを自動判別
    */
   static detectType(t) {
-    return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(t) ? "youtube" : /^[.#]/.test(t) ? "selector" : /\.(jpe?g|png|gif|webp)$/i.test(t) ? "image" : /^https?:\/\//.test(t) ? "ajax" : null;
+    return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(t) ? "youtube" : /\.(jpe?g|png|gif|webp)$/i.test(t) ? "image" : null;
   }
   /**
    * 画像のドラッグイベントリスナーをクリーンアップ
    */
   static cleanupImageDragListeners() {
     if (!this.imageDragListeners) return;
-    const { doDrag: t, endDrag: n, startDrag: e, touchStart: r, touchMove: a, touchEnd: s, onResizeHandler: l, rafId: d } = this.imageDragListeners;
+    const { doDrag: t, endDrag: n, startDrag: e, touchStart: r, touchMove: a, touchEnd: o, onResizeHandler: l, rafId: d } = this.imageDragListeners;
     if (d != null && cancelAnimationFrame(d), this.currentModalUI) {
-      const m = this.currentModalUI.getContainer();
-      m.removeEventListener("mousedown", e), m.removeEventListener("touchstart", r);
+      const g = this.currentModalUI.getContainer();
+      g.removeEventListener("mousedown", e), g.removeEventListener("touchstart", r);
     }
-    document.removeEventListener("mousemove", t), document.removeEventListener("touchmove", a), document.removeEventListener("mouseup", n), document.removeEventListener("touchend", s), document.removeEventListener("touchcancel", s), window.removeEventListener("resize", l), this.imageDragListeners = null;
+    document.removeEventListener("mousemove", t), document.removeEventListener("touchmove", a), document.removeEventListener("mouseup", n), document.removeEventListener("touchend", o), document.removeEventListener("touchcancel", o), window.removeEventListener("resize", l), this.imageDragListeners = null;
+  }
+  /**
+   * 履歴に状態を追加
+   */
+  static pushHistory(t, n, e) {
+    if (!this.isRestoringFromHistory && (this.useHistory || e.useHistory) && n !== "html" && t) {
+      const r = {
+        sygModal: !0,
+        src: t,
+        type: n,
+        options: {
+          closeButtonContent: e.closeButtonContent || this.currentOptions.closeButtonContent,
+          loadingContent: e.loadingContent || this.currentOptions.loadingContent,
+          modalClass: e.modalClass || this.currentOptions.modalClass,
+          containerClass: e.containerClass || this.currentOptions.containerClass,
+          contentClass: e.contentClass || this.currentOptions.contentClass,
+          closeBtnClass: e.closeBtnClass || this.currentOptions.closeBtnClass,
+          loadingClass: e.loadingClass || this.currentOptions.loadingClass
+        }
+      };
+      window.history.pushState(r, "", window.location.href);
+    }
   }
   /**
    * コンテンツを読み込み
    */
   static async loadContent(t, n, e) {
     if (!this.currentModalUI) return;
-    const r = this.currentModalUI.getContent(), a = this.currentModalUI.getDialog(), s = this.currentModalUI.getContainer();
+    const r = this.currentModalUI.getContent(), a = this.currentModalUI.getDialog(), o = this.currentModalUI.getContainer();
     r.innerHTML = "", this.currentModalUI.setLoadingState("loading");
     try {
       switch (n) {
@@ -295,10 +334,10 @@ const b = class b {
           await et(t, r);
           break;
         case "image":
-          this.imageDragListeners = await ot(t, r, a, s);
+          this.imageDragListeners = await st(t, r, a, o);
           break;
         case "ajax":
-          await st(t, r);
+          await ot(t, r);
           break;
         case "selector":
           it(t, r);
@@ -323,12 +362,18 @@ const b = class b {
       console.error("コンテンツタイプが判別できません:", t);
       return;
     }
-    this.currentModalUI.setType(e), this.loadContent(t, e, n);
+    this.currentModalUI.setType(e), this.pushHistory(t, e, n), this.loadContent(t, e, n);
+  }
+  /**
+   * モーダルを閉じる
+   */
+  static closeModal() {
+    this.currentModalUI && this.currentModalUI.close();
   }
 };
-b.currentModalUI = null, b.boundSelectors = /* @__PURE__ */ new Set(), b.delegateListener = null, b.imageDragListeners = null;
-let _ = b;
+h.currentModalUI = null, h.boundSelectors = /* @__PURE__ */ new Set(), h.delegateListener = null, h.imageDragListeners = null, h.popstateListener = null, h.useHistory = !1, h.isRestoringFromHistory = !1, h.currentOptions = {};
+let G = h;
 export {
-  _ as SygModalDialog
+  G as SygModalDialog
 };
 //# sourceMappingURL=syg-modal-dialog.es.js.map

@@ -3,12 +3,19 @@ export declare class SygModalDialog {
     private static boundSelectors;
     private static delegateListener;
     private static imageDragListeners;
+    private static popstateListener;
+    private static useHistory;
+    private static isRestoringFromHistory;
+    private static currentOptions;
     static bind(selector: string, options?: TModalDialogOption): void;
+    private static setupPopstateListener;
     static showModal(options: TModalDialogOption): void;
     private static detectType;
     private static cleanupImageDragListeners;
+    private static pushHistory;
     private static loadContent;
     private static updateContent;
+    private static closeModal;
 }
 
 export declare type TModalDialogOption = {
@@ -22,6 +29,7 @@ export declare type TModalDialogOption = {
     contentClass?: string;
     closeBtnClass?: string;
     loadingClass?: string;
+    useHistory?: boolean;
     onOpen?: () => void;
     onClose?: () => void;
 };

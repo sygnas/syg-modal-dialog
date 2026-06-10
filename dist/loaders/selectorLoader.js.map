@@ -1,0 +1,1 @@
+{"version":3,"file":"selectorLoader.js","sourceRoot":"","sources":["../../src/js/loaders/selectorLoader.ts"],"names":[],"mappings":"AAOA,MAAM,UAAU,YAAY,CAAC,GAAW,EAAE,OAAoB;IAC5D,MAAM,OAAO,GAAG,QAAQ,CAAC,aAAa,CAAC,GAAG,CAAC,CAAC;IAE5C,IAAI,CAAC,OAAO,EAAE,CAAC;QACb,MAAM,IAAI,KAAK,CAAC,eAAe,GAAG,EAAE,CAAC,CAAC;IACxC,CAAC;IAED,OAAO,CAAC,SAAS,GAAG,OAAO,CAAC,SAAS,CAAC;AACxC,CAAC"}
