@@ -98,6 +98,42 @@ const likes = ref(0);
 </script>
 ```
 
+### パターン4: イベントの受け取りとオプションの指定
+
+```vue
+<template>
+  <button @click="isOpen = true">モーダルを開く</button>
+
+  <SygModalUI
+    v-model="isOpen"
+    closeButtonContent="✕ 閉じる"
+    @open="onOpen"
+    @close="onClose"
+  >
+    <h1>Hello World</h1>
+  </SygModalUI>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { SygModalUI } from '@sygnas/modal-dialog/vue';
+
+const isOpen = ref(false);
+
+// イベントの受け取り
+const onOpen = () => {
+  console.log('モーダルが開きました');
+};
+
+const onClose = () => {
+  console.log('モーダルが閉じました');
+};
+</script>
+```
+
+- **オプションの指定**: `closeButtonContent="✕ 閉じる"` のように prop で渡します（他に `modalClass` などの prop も指定可能）。
+- **イベントの受け取り**: `@open` / `@close` でリッスンします。
+
 ## 🎨 Props
 
 ### SygModalUI.vue
