@@ -134,6 +134,56 @@ const onClose = () => {
 - **オプションの指定**: `closeButtonContent="✕ 閉じる"` のように prop で渡します（他に `modalClass` などの prop も指定可能）。
 - **イベントの受け取り**: `@open` / `@close` でリッスンします。
 
+### パターン5: 外部の状態（store など）に開閉を連動させる
+
+開閉を `boolean` の ref ではなく、**外部の状態（例: 選択中のアイテム ID）** に連動させたい場合のパターン。
+「ID があれば開く／閉じたら ID をクリアする」という双方向を、**書き込み可能な computed（get/set）** を作って `v-model` に渡すことで実現します。
+
+```vue
+<template>
+  <SygModalUI v-model="isModalOpen" closeButtonContent="✕ 閉じる">
+    <h2>{{ item?.title }}</h2>
+    <p>{{ item?.body }}</p>
+  </SygModalUI>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { SygModalUI } from '@sygnas/modal-dialog/vue';
+import { useStore } from './store';
+
+const store = useStore();
+const { selectedId } = storeToRefs(store);
+
+// 表示中のアイテム（selectedId から解決）
+const item = computed(() => store.getItem(selectedId.value));
+
+// 開閉を selectedId に連動させる。
+// get: ID が有れば開く / set: 閉じられたら ID をクリアする
+const isModalOpen = computed({
+  get: () => !!selectedId.value,
+  set: (open: boolean) => {
+    if (!open) store.select(''); // 閉じる系（閉じるボタン/ESC/背景クリック）はすべてここに来る
+  },
+});
+</script>
+```
+
+**ポイント:**
+
+- **開く**: `selectedId` がセットされると `get` が `true` を返し、モーダルが開く。
+- **閉じる**: 閉じるボタン / ESC / 背景クリックで `update:modelValue(false)` が発火 → `set(false)` → store をクリア → `get` が `false` になり閉じる。
+- **`v-model="!!selectedId"` は不可**: `v-model` は「書き戻せる参照」を必要とするが、`!!selectedId` は**式**なので閉じる時の書き戻し（`= $event`）ができず、開けても閉じられない。派生値に連動させたいときは、このように **writable computed を挟む**。
+- 別解として、書き戻し先が外部メソッド一発で済むなら、`:model-value`（一方向）+ `@close` に分けて書くこともできる。
+
+```vue
+<!-- writable computed を使わない書き方（開く条件が式でも OK） -->
+<SygModalUI :model-value="!!selectedId" @close="store.select('')">
+  ...
+</SygModalUI>
+```
+
 ## 🎨 Props
 
 ### SygModalUI.vue
