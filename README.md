@@ -91,7 +91,7 @@ SygModalDialog.showModal({
 
 ### CDNから
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.0.0/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.0.1/dist/style.css">
 ```
 
 ### JavaScriptから
@@ -473,6 +473,11 @@ SygModalDialog.showModal(options);
 MIT
 
 ## 変更履歴
+
+### v3.0.1
+- Safari で dialog の外側に置いた要素（クローズボタンなど）が表示されない問題を修正
+  - `max-height` を `100vh` に固定し、余白は `padding` で取るように変更
+  - `--c-modal--theme-margin-tb` を廃止
 
 ### v3.0.0
 - Vue版を追加

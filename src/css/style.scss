@@ -6,7 +6,6 @@
   --c-modal--bg-color: var(--c-modal--theme-bg-color, transparent);
   --c-modal--youtube-width: var(--c-modal--theme-youtube-width, 800px);
   --c-modal--max-width: var(--c-modal--theme-max-width, 100%);
-  --c-modal--margin-tb: var(--c-modal--theme-margin-tb, 4rem);
   --c-modal--padding: var(--c-modal--theme-padding, 0);
   --c-modal--border: var(--c-modal--theme-border, none);
   --c-modal--duration: var(--c-modal--theme-duration, .2s);
@@ -40,7 +39,7 @@
 .c-modal{
   width: 100%;
   max-width: var(--c-modal--max-width);
-  max-height: calc(100% - (var(--c-modal--margin-tb) * 2));
+  max-height: 100vh;
   margin: auto;
   padding: var(--c-modal--padding);
   background-color: var(--c-modal--bg-color);
