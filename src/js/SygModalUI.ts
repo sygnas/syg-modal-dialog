@@ -34,9 +34,18 @@ export class SygModalUI {
   };
 
   constructor(options: TModalUIOption = {}) {
+    // 値が undefined の項目は初期値を上書きしないように取り除く
+    // （履歴から復元したオプションに modalClass: undefined などが入っていると class="undefined" になっていた）
+    const definedOptions: TModalUIOption = {};
+    (Object.keys(options) as (keyof TModalUIOption)[]).forEach((key) => {
+      if (options[key] !== undefined) {
+        (definedOptions as Record<string, unknown>)[key] = options[key];
+      }
+    });
+
     this.options = {
       ...SygModalUI.defaultOptions,
-      ...options,
+      ...definedOptions,
     };
 
     // dialog要素を作成

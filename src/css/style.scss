@@ -17,7 +17,7 @@
   --c-modal--close-border: var(--c-modal--theme-close-border, none);
   --c-modal--close-bg-color: var(--c-modal--theme-close-bg-color, transparent);
   --c-modal--close-color: var(--c-modal--theme-close-color, #fff);
-  --c-modal--close-color-hover: var(--c-modal--theme-close-color-hover, var(--root-color_green));
+  --c-modal--close-color-hover: var(--c-modal--theme-close-color-hover, var(--root-color_green, #ccc));
   --c-modal--close-transition: var(--c-modal--theme-close-transition, .2s);
   // .c-modal__loading
   --c-modal--loading-width: var(--c-modal--theme-loading-width, 2rem);

@@ -39,10 +39,30 @@ export type TModalDialogOption = {
   loadingClass?: string;
   /** ブラウザバック対応を有効にする（デフォルト: false） */
   useHistory?: boolean;
+  /** 表示中の src を URL のハッシュに入れる（デフォルト: false。data-syg-modal-hash 属性と同じ） */
+  hash?: boolean;
   /** 開いた時のコールバック */
-  onOpen?: () => void;
-  /** 閉じた時のコールバック */
-  onClose?: () => void;
+  onOpen?: (info: TModalDialogEventInfo) => void;
+  /** 閉じた時のコールバック（info は閉じる直前に表示していた中身） */
+  onClose?: (info: TModalDialogEventInfo) => void;
+  /** 開いたまま中身を入れ替えた時のコールバック */
+  onChange?: (info: TModalDialogEventInfo) => void;
+  /** 中身の読み込みが終わった時のコールバック（失敗した時は info.error が入る） */
+  onLoad?: (info: TModalDialogEventInfo) => void;
+};
+
+/**
+ * コールバックに渡す情報
+ */
+export type TModalDialogEventInfo = {
+  /** 表示している URL / セレクタ（html タイプは ''） */
+  src: string;
+  /** コンテンツタイプ */
+  type: TModalDialogType;
+  /** クリックした要素。showModal() やイベントで開いた時は null */
+  trigger: HTMLElement | null;
+  /** 読み込みに失敗した時のエラー（onLoad だけ） */
+  error?: unknown;
 };
 
 /**

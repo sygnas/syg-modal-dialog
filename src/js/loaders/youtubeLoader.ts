@@ -25,20 +25,39 @@ export async function loadYoutube(src: string, content: HTMLElement): Promise<vo
 }
 
 /**
- * YouTube動画IDを抽出
+ * YouTube の URL か判定
+ * 対象：youtube.com / youtu.be / youtube-nocookie.com（www. / m. 付きも）
  */
-function extractYoutubeId(url: string): string | null {
-  // youtube.com/watch?v=VIDEO_ID
-  let match = url.match(/[?&]v=([^&]+)/);
-  if (match?.[1]) return match[1];
+export function isYoutubeUrl(url: string): boolean {
+  return /^https?:\/\/(www\.|m\.)?(youtube\.com|youtube-nocookie\.com|youtu\.be)\//i.test(url);
+}
 
-  // youtu.be/VIDEO_ID
-  match = url.match(/youtu\.be\/([^?&]+)/);
-  if (match?.[1]) return match[1];
+/**
+ * YouTube動画IDを抽出
+ * 対応：watch?v=ID / youtu.be/ID / embed/ID / shorts/ID / live/ID（?si= や &t= 付きも可）
+ * 取り出した値の先頭 11 文字（英数字・-・_）を ID とする。
+ * embed/ID%22 のように後ろに余計な文字が付いていても、ID だけを使う
+ */
+export function extractYoutubeId(url: string): string | null {
+  if (!isYoutubeUrl(url)) return null;
 
-  // youtube.com/embed/VIDEO_ID
-  match = url.match(/youtube\.com\/embed\/([^?&]+)/);
-  if (match?.[1]) return match[1];
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
 
-  return null;
+  const host = parsed.hostname.toLowerCase().replace(/^(www\.|m\.)/, '');
+  let candidate = '';
+
+  if (host === 'youtu.be') {
+    candidate = parsed.pathname.split('/')[1] || '';
+  } else {
+    const match = parsed.pathname.match(/^\/(embed|shorts|live|v)\/([^/]+)/);
+    candidate = match?.[2] ?? (parsed.searchParams.get('v') || '');
+  }
+
+  const id = candidate.match(/^([\w-]{11})(?![\w-])/);
+  return id?.[1] ?? null;
 }

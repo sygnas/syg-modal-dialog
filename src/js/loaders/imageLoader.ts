@@ -324,3 +324,13 @@ export async function loadImage(
     img.src = src;
   });
 }
+
+/**
+ * 画像の表示で container に付けたスタイルを消す
+ * 開いたまま別の種類に入れ替えた時に、画像の大きさ・位置・ズームが残らないようにする
+ */
+export function resetImageContainer(container: HTMLElement): void {
+  ['width', 'height', 'left', 'top', 'transform', 'transform-origin'].forEach((prop) => {
+    container.style.removeProperty(prop);
+  });
+}

@@ -222,4 +222,9 @@ export async function loadImage(src, content, dialog, container) {
         img.src = src;
     });
 }
+export function resetImageContainer(container) {
+    ['width', 'height', 'left', 'top', 'transform', 'transform-origin'].forEach((prop) => {
+        container.style.removeProperty(prop);
+    });
+}
 //# sourceMappingURL=imageLoader.js.map

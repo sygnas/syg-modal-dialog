@@ -1,6 +1,6 @@
 {
   "name": "@sygnas/modal-dialog",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "<dialog>要素を使ったLightbox風モーダルダイアログライブラリ",
   "main": "./dist/syg-modal-dialog.umd.js",
   "module": "./dist/syg-modal-dialog.es.js",
@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && vite build --config vite.config.css.ts && vite build --config vite.config.vue.ts",
+    "build": "node -e \"require('fs').rmSync('dist/index.d.ts', { force: true })\" && tsc && vite build && vite build --config vite.config.css.ts && vite build --config vite.config.vue.ts",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

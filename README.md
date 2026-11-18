@@ -91,7 +91,7 @@ SygModalDialog.showModal({
 
 ### CDNから
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.0.1/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.1.0/dist/style.css">
 ```
 
 ### JavaScriptから
@@ -135,10 +135,15 @@ SygModalDialog.showModal({
 });
 ```
 
-対応URL形式:
+対応URL形式（`www.`・`m.` なし / ありのどちらも。`?si=` や `&t=` 付きも可）:
 - `https://www.youtube.com/watch?v=VIDEO_ID`
 - `https://youtu.be/VIDEO_ID`
 - `https://www.youtube.com/embed/VIDEO_ID`
+- `https://www.youtube.com/shorts/VIDEO_ID`
+- `https://www.youtube.com/live/VIDEO_ID`
+- `https://www.youtube-nocookie.com/embed/VIDEO_ID`
+
+動画IDは、取り出した値の先頭 11 文字（英数字・`-`・`_`）を使います。`embed/VIDEO_ID%22` のように後ろに余計な文字が付いていても再生できます。
 
 ### `image` - 画像表示
 
@@ -244,12 +249,16 @@ SygModalDialog.showModal({
 
 | パターン | 判別結果 |
 |---------|---------|
-| `https://youtube.com/...` または `https://youtu.be/...` | `youtube` |
-| `#...` または `.` で始まる | `selector` |
-| `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp` で終わる | `image` |
-| `http://...` または `https://...` | `ajax` |
+| `youtube.com` / `youtu.be` / `youtube-nocookie.com` の URL | `youtube` |
+| クエリ（`?`）とハッシュ（`#`）を除いて `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp` で終わる（大文字・小文字を区別しない） | `image` |
 
-**注意:** `html`タイプは自動判別されません。明示的に指定してください。
+- `src` の前後の空白（全角スペースも）は取り除きます
+- `selector` と `ajax` は自動判別されません。`data-syg-modal="selector"` / `data-syg-modal="ajax"` のように指定してください
+- `html`タイプは自動判別されません。明示的に指定してください
+
+**判別できないリンク:** クリックしても種類が判別できない（例: `.mp4` のリンク）、または YouTube の動画IDが取れないときは、モーダルを開かず、リンクのとおりにページを移動します。
+
+**修飾キー付きのクリック:** Ctrl / Cmd / Shift / Alt + クリックと、左ボタン以外のクリックは、モーダルを開かずブラウザに任せます（新しいタブで開くなど）。
 
 ## オプション
 
@@ -281,12 +290,27 @@ type TModalDialogOption = {
   
   // ブラウザバック対応を有効にする（デフォルト: false）
   useHistory?: boolean;
+
+  // 表示中の src を URL のハッシュに入れる（デフォルト: false。data-syg-modal-hash 属性と同じ）
+  hash?: boolean;
   
-  // コールバック
-  onOpen?: () => void;        // 開いた時
-  onClose?: () => void;       // 閉じた時
+  // コールバック（引数を受け取らない書き方もそのまま使えます）
+  onOpen?: (info: TModalDialogEventInfo) => void;    // 開いた時
+  onClose?: (info: TModalDialogEventInfo) => void;   // 閉じた時（閉じる直前の中身）
+  onChange?: (info: TModalDialogEventInfo) => void;  // 開いたまま中身を入れ替えた時
+  onLoad?: (info: TModalDialogEventInfo) => void;    // 中身の読み込みが終わった時
+}
+
+type TModalDialogEventInfo = {
+  src: string;                  // 表示している URL / セレクタ（html タイプは ''）
+  type: TModalDialogType;
+  trigger: HTMLElement | null;  // クリックした要素。showModal() やイベントで開いた時は null
+  error?: unknown;              // 読み込みに失敗した時のエラー（onLoad だけ）
 }
 ```
+
+- 中身を入れ替えた時のコールバック（`onChange` / `onLoad` / `onClose`）は、最初に開いた時のオプションのものが使われます
+- `onLoad` は読み込みに失敗した時も呼ばれ、`info.error` にエラーが入ります。Ajax で読み込んだ中身の画像の遅延読み込みを始める時などに使えます
 
 ### 使用例
 
@@ -311,6 +335,8 @@ SygModalDialog.bind('[data-syg-modal]', {
 ### 動的に追加された要素にも対応
 
 `bind()`メソッドはイベント委譲を使用しているため、後から動的に追加された要素にも自動的に対応します。
+
+クリックは `document` の capture フェーズで受けます。Google タグマネージャーのリンククリックのトリガー（「タグの配信を待つ」が有効で「妥当性をチェック」が無効）は、`document` の bubble でクリックを受け、その時点で `preventDefault()` されていないと、タグを送ったあとにリンク先へ移動させてしまうためです。そのため、リンクの内側の要素で `preventDefault()` しても、モーダルは開きます。開かせたくない要素には `data-syg-modal` を付けないでください。
 
 ```typescript
 // 初回バインド
@@ -361,6 +387,48 @@ SygModalDialog.bind('[data-syg-modal]', {
 **制限事項:**
 - `type="html"`は履歴に保存されません（保存内容が複雑なため）
 - URLは変更されません（VueRouterなどとの競合を避けるため）
+
+閉じるボタン・ESC・背景のクリックで閉じたときは、開いてから積んだ履歴の数だけ戻ります（中身を入れ替えていても、前の中身が開き直しません）。
+
+### ハッシュ（共有できる URL）
+
+`data-syg-modal-hash` 属性（または `hash: true`）を付けると、開いている間、URL のハッシュに `src` が入ります。SNS などで共有された URL からモーダルを開けるようにするためのものです。
+
+```html
+<a href="#detail.php?id=1" data-syg-modal="ajax" data-syg-modal-src="detail.php?id=1" data-syg-modal-hash>詳細</a>
+```
+
+- 開くと `#detail.php?id=1` になり、閉じると消えます（`#` も残りません）
+- ハッシュの指定がある中身に入れ替えるとハッシュを更新し、指定が無い中身に入れ替えるとハッシュを消します
+- `history.replaceState()` で書き換えるので、履歴は増えず、`hashchange` も起きません（Vue Router などのハッシュのルーターを動かしません）
+
+**ページを開いた時にハッシュから開く処理は入っていません。** ハッシュをそのまま `showModal()` に渡すと、`#https://外部/x.html` のような URL で外部の HTML をサイトの中に読み込めてしまいます。開いてよい形かをサイト側でチェックしてから開いてください。
+
+```typescript
+// 例：detail.php?id={数字} の形のときだけ開く
+const hash = window.location.hash.slice(1);
+if (/^detail\.php\?id=\d+$/.test(hash)) {
+  SygModalDialog.showModal({ src: hash, type: 'ajax', hash: true });
+}
+```
+
+### イベントで開く・閉じる
+
+`bind()` を呼ぶと、`window` の `syg-modal:open` / `syg-modal:close` イベントを受けるようになります。
+
+webpack のエントリごとにバンドルしているなど、ページの中でライブラリが別々に読み込まれる構成では、別のバンドルから `showModal()` を呼ぶと、開いているモーダルを入れ替えられず 2 枚目が重なります。別のバンドルからはライブラリを import せず、イベントで開いてください。
+
+```javascript
+// bind() したバンドルとは別のスクリプトから
+window.dispatchEvent(new CustomEvent('syg-modal:open', {
+  detail: { src: 'detail.php?id=1', type: 'ajax', hash: true },
+}));
+
+window.dispatchEvent(new CustomEvent('syg-modal:close'));
+```
+
+- `detail` は `showModal()` のオプションと同じです（`src` / `type` / `html` / `hash`）。最初に `bind()` した時のオプション（閉じるボタン・コールバックなど）と合わせて開きます
+- 開いている間に `syg-modal:open` すると、中身が入れ替わります
 
 ### ローディング状態
 
@@ -456,7 +524,7 @@ modalUI.close();
 完全なTypeScript対応。型定義が含まれています。
 
 ```typescript
-import { SygModalDialog, TModalDialogOption, TModalDialogType } from 'syg-modal-dialog';
+import { SygModalDialog, TModalDialogOption, TModalDialogType, TModalDialogEventInfo } from 'syg-modal-dialog';
 
 const options: TModalDialogOption = {
   src: '/images/photo.jpg',
@@ -473,6 +541,27 @@ SygModalDialog.showModal(options);
 MIT
 
 ## 変更履歴
+
+### v3.1.0
+Fancybox 3 からの移行で足りなかった機能の追加と、不具合の修正。今の使い方はそのまま動きます。
+- 追加
+  - ハッシュ（`data-syg-modal-hash` / `hash: true`）
+  - `syg-modal:open` / `syg-modal:close` イベントで開閉できるようにした（別のバンドルから開くため）
+  - コールバックに `{ src, type, trigger }` を渡すようにし、`onChange`・`onLoad` を追加
+  - YouTube の `shorts/`・`live/`・`youtube-nocookie.com`・`m.youtube.com` に対応
+- 修正
+  - クエリ付きの画像の URL（`photo.jpg?5`）を画像と判別できなかった
+  - `src` の前後に空白があると判別できなかった
+  - YouTube の動画IDの後ろに余計な文字（`%22` など）があると再生できなかった
+  - 種類が判別できないリンクをクリックすると何も起きなかった（リンクのとおり移動するようにした）
+  - Ctrl / Cmd + クリックで新しいタブが開かなかった
+  - 画像のあとに別の種類へ入れ替えると、画像の大きさ・位置が残った
+  - `useHistory: true` で中身を入れ替えたあとに閉じると、前の中身が開き直した（`class="undefined"` にもなった）
+  - 閉じるボタンのホバー色の初期値が、`--root-color_green` の無いサイトで効かなかった（無いときは `#ccc`）
+  - クリックを `document` の capture で受けるようにした。Google タグマネージャーのリンククリックのトリガーが、モーダルを開いた直後にリンク先へ移動させることがあった
+  - ビルドの出力先の修正：`vite.config.ts` の `root: 'demo'`（v3.0.0 の Vue 版の追加で入った）のため、入口のバンドル（`syg-modal-dialog.es.js` / `umd.js`）と型定義（`index.d.ts`）が `dist/` に出ず、更新されていなかった
+  - Vue 版の型定義（`dist/vue/index.d.ts`。`exports` の `./vue` の `types` が指すファイル）がビルドで作られていなかった
+  - README の自動判別の表を、実際の動き（`selector`・`ajax` は自動判別しない）に合わせた
 
 ### v3.0.1
 - Safari で dialog の外側に置いた要素（クローズボタンなど）が表示されない問題を修正

@@ -216,6 +216,51 @@
       </a>
     </div>
 
+    <div class="demo-section" id="v310">
+      <h2>🆕 v3.1.0 で直した判別</h2>
+      <p>種類の指定（data-syg-modal の値）なしで、URL から判別します。</p>
+      <div class="demo-grid">
+        <a href="https://fastly.picsum.photos/id/625/1024/768.jpg?hmac=MDqEkgdnwvjsXkGH-qF3OXnWcb7cWbs4yW3qi3-4GQ0" data-syg-modal class="demo-link image" id="v310-query-image">
+          クエリ付きの画像
+        </a>
+        <a href="  https://www.youtube.com/watch?v=dQw4w9WgXcQ　" data-syg-modal class="demo-link youtube" id="v310-space">
+          前後に空白（全角も）
+        </a>
+        <a href="https://www.youtube.com/shorts/jNQXAC9IVRw" data-syg-modal class="demo-link youtube" id="v310-shorts">
+          shorts
+        </a>
+        <a href="https://youtu.be/jNQXAC9IVRw?si=abc" data-syg-modal class="demo-link youtube" id="v310-si">
+          youtu.be?si=
+        </a>
+        <a href="https://youtube.com/embed/jNQXAC9IVRw%22" data-syg-modal class="demo-link youtube" id="v310-garbage">
+          embed/ID%22（www なし）
+        </a>
+        <a href="https://www.youtube-nocookie.com/embed/jNQXAC9IVRw" data-syg-modal class="demo-link youtube" id="v310-nocookie">
+          youtube-nocookie
+        </a>
+        <a href="/demo/sample.mp4" data-syg-modal class="demo-link" id="v310-mp4">
+          .mp4（ページを移動する）
+        </a>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2>🔖 ハッシュ（data-syg-modal-hash）</h2>
+      <p>開くと URL のハッシュに src が入り、閉じると消えます。履歴は増えません。</p>
+      <a href="#/demo/sample.html" data-syg-modal="ajax" data-syg-modal-src="/demo/sample.html" data-syg-modal-hash class="demo-link" id="v310-hash">
+        sample.html をハッシュ付きで開く
+      </a>
+      <button class="demo-button" data-syg-modal="selector" data-syg-modal-src="#switch" id="v310-switch">
+        画像 → ajax の入れ替え
+      </button>
+    </div>
+
+    <div class="demo-section">
+      <h2>📣 イベントで開く（syg-modal:open）</h2>
+      <p>ライブラリを import していないスクリプトから開きます。</p>
+      <button class="demo-button" id="eventOpenButton">イベントで sample.html を開く</button>
+    </div>
+
     <div class="demo-section">
       <h2>💻 プログラムから起動</h2>
       <p>JavaScriptから直接モーダルを開きます。</p>
@@ -241,6 +286,14 @@
         <h3>📝 サンプルコンテンツ</h3>
         <p>これはページ内の非表示要素です。</p>
         <p>セレクタを使って表示しています。</p>
+      </div>
+    </div>
+
+    <div id="switch" class="hidden-content">
+      <div style="padding: 20px">
+        <h3>🔁 入れ替え</h3>
+        <p>画像を開いたあと、コンソールで <code>window.dispatchEvent(new CustomEvent('syg-modal:open', { detail: { src: '/demo/sample.html', type: 'ajax' } }))</code> を実行すると、sample.html に入れ替わります（画像の大きさ・位置が残らないこと）。</p>
+        <a href="https://picsum.photos/800/600?random=20" data-syg-modal="image" id="v310-switch-image">画像を開く</a>
       </div>
     </div>
 
@@ -283,8 +336,19 @@
       SygModalDialog.bind("[data-syg-modal]", {
         closeButtonContent: "✕",
         useHistory: true, // ブラウザバック対応を有効化
-        onOpen: () => console.log("モーダルが開きました"),
-        onClose: () => console.log("モーダルが閉じました"),
+        onOpen: (info) => console.log("モーダルが開きました", info),
+        onChange: (info) => console.log("中身を入れ替えました", info),
+        onLoad: (info) => console.log("読み込みが終わりました", info),
+        onClose: (info) => console.log("モーダルが閉じました", info),
+      });
+
+      // ライブラリを import していないスクリプトの代わり（イベントを投げるだけ）
+      document.getElementById("eventOpenButton").addEventListener("click", () => {
+        window.dispatchEvent(
+          new CustomEvent("syg-modal:open", {
+            detail: { src: "/demo/sample.html", type: "ajax", hash: true },
+          })
+        );
       });
 
       // プログラムから起動

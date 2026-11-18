@@ -1,8 +1,14 @@
 export class SygModalUI {
     constructor(options = {}) {
+        const definedOptions = {};
+        Object.keys(options).forEach((key) => {
+            if (options[key] !== undefined) {
+                definedOptions[key] = options[key];
+            }
+        });
         this.options = {
             ...SygModalUI.defaultOptions,
-            ...options,
+            ...definedOptions,
         };
         this.dialog = this.createDialog();
         this.container = this.dialog.querySelector(`#syg-modal-container`);

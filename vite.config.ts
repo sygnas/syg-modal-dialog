@@ -12,6 +12,10 @@ export default defineConfig({
     },
   },
   build: {
+    // root を demo にしているので、出力先はルートの dist を明示する（指定しないと demo/dist に出てしまう）。
+    // dist には tsc と CSS・Vue 版のビルドも出すので、消さない
+    outDir: resolve(__dirname, 'dist'),
+    emptyOutDir: false,
     lib: {
       entry: resolve(__dirname, 'src/js/SygModalDialog.ts'),
       name: 'SygModalDialog',
@@ -30,6 +34,9 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
+      // root を demo にしているので、型定義も基準をリポジトリのルートに戻す
+      // （指定しないと src/js が見つからず、demo/dist に空の index.d.ts が出る）
+      root: __dirname,
       include: ['src/js/**/*.ts'],
       outDir: 'dist',
       insertTypesEntry: true,
