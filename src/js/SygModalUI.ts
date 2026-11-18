@@ -5,6 +5,7 @@
  */
 
 import type { TModalUIOption, TModalDialogType, TModalLoadingState } from './types';
+import { lockScroll, unlockScroll } from './scrollLock';
 
 export class SygModalUI {
   private dialog: HTMLDialogElement;
@@ -112,8 +113,7 @@ export class SygModalUI {
     // closeイベント
     this.dialog.addEventListener('close', () => {
       // スクロールを戻す
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
+      unlockScroll();
 
       // onCloseコールバック
       if (this.options.onClose) {
@@ -134,9 +134,8 @@ export class SygModalUI {
     // モーダルを表示
     this.dialog.showModal();
 
-    // 背景スクロールを止める
-    document.documentElement.style.overflow = 'hidden';
-    document.documentElement.style.height = '100vh';
+    // 背景スクロールを止める（スクロールバーの幅の補正もする）
+    lockScroll();
 
     // onOpenコールバック
     if (this.options.onOpen) {

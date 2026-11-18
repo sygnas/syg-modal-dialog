@@ -1,3 +1,4 @@
+import { lockScroll, unlockScroll } from './scrollLock';
 export class SygModalUI {
     constructor(options = {}) {
         const definedOptions = {};
@@ -51,8 +52,7 @@ export class SygModalUI {
             }
         });
         this.dialog.addEventListener('close', () => {
-            document.documentElement.style.overflow = '';
-            document.documentElement.style.height = '';
+            unlockScroll();
             if (this.options.onClose) {
                 this.options.onClose();
             }
@@ -63,8 +63,7 @@ export class SygModalUI {
             document.body.appendChild(this.dialog);
         }
         this.dialog.showModal();
-        document.documentElement.style.overflow = 'hidden';
-        document.documentElement.style.height = '100vh';
+        lockScroll();
         if (this.options.onOpen) {
             this.options.onOpen();
         }

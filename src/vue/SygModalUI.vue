@@ -4,7 +4,7 @@
  * <dialog>ベースの完全リアクティブなモーダルUIコンポーネント
  * 
  * 特徴:
- * - TypeScriptクラス(SygModalUI.ts, SygModalDialog.ts)を一切利用しない独立コンポーネント
+ * - TypeScriptクラス(SygModalUI.ts, SygModalDialog.ts)を一切利用しない独立コンポーネント（背景のスクロールを止める scrollLock.ts だけは共有する）
  * - クラス名とDOM構造のみTypeScript版と同一（CSS共有）
  * - v-model対応
  * - slotで任意のコンテンツをリアクティブに表示
@@ -12,6 +12,7 @@
  */
 
 import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { lockScroll, unlockScroll } from '../js/scrollLock';
 
 export interface Props {
   /** モーダルの開閉状態 */
@@ -53,9 +54,8 @@ const open = () => {
   
   dialogRef.value.showModal();
   
-  // 背景スクロールを止める
-  document.documentElement.style.overflow = 'hidden';
-  document.documentElement.style.height = '100vh';
+  // 背景スクロールを止める（スクロールバーの幅の補正もする）
+  lockScroll();
   
   emit('open');
 };
@@ -69,8 +69,7 @@ const close = () => {
   dialogRef.value.close();
   
   // スクロールを戻す
-  document.documentElement.style.overflow = '';
-  document.documentElement.style.height = '';
+  unlockScroll();
   
   emit('update:modelValue', false);
   emit('close');
@@ -100,6 +99,9 @@ watch(() => props.modelValue, (newValue) => {
  * dialogのcloseイベントを監視
  */
 const handleClose = () => {
+  // 閉じるボタン・ESC で閉じたときは、dialog が先に閉じていて close() がスクロールを戻さないので、ここで戻す
+  unlockScroll();
+
   if (props.modelValue) {
     emit('update:modelValue', false);
     emit('close');
@@ -120,8 +122,7 @@ onMounted(() => {
  */
 onUnmounted(() => {
   // スクロールを戻す
-  document.documentElement.style.overflow = '';
-  document.documentElement.style.height = '';
+  unlockScroll();
 });
 </script>
 

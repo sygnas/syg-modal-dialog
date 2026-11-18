@@ -94,6 +94,8 @@
       height: auto;
       aspect-ratio: 16 / 9;
       border: none;
+      // インライン要素のままだと、文字のベースラインの分だけ下に隙間ができる
+      display: block;
     }
   }
 

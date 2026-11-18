@@ -91,7 +91,7 @@ SygModalDialog.showModal({
 
 ### CDNから
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.1.0/dist/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@sygnas/modal-dialog@3.2.0/dist/style.css">
 ```
 
 ### JavaScriptから
@@ -103,20 +103,18 @@ import '@sygnas/modal-dialog/style.css';
 ## スクロールバーによる背景ズレの対策
 
 モーダルを開いている間は背景のスクロールを止めるため、`html` に `overflow: hidden` を適用しています。
-このとき縦スクロールバーが消え、その幅（約 15px）だけ表示領域が広がります。
-`body` などに背景画像を敷いていると、この幅の変化で背景がガクッと動いて見えることがあります。
+このとき縦スクロールバーが消え、その幅（約 15px）だけ表示領域が広がるので、そのままでは背景が右にずれます。
 
-利用するページ側の CSS で、`html` にスクロールバー分の溝を常に確保しておくと、この動きを防げます。
+v3.2.0 から、ライブラリが自動で補正します。
 
-```css
-html {
-  scrollbar-gutter: stable;
-}
-```
+- 開くときに消えるスクロールバーの幅を測り、`html` の `padding-right` に足します（閉じると元に戻します）
+- 表示領域はスクロールバーの分まで広がるので、背景（`::backdrop`）は画面の幅いっぱいに出ます
+- スクロールバーが重ねて表示される環境（macOS の標準設定・スマートフォン）では、幅が 0 なので何もしません
+- 画面の右端に `position: fixed` で置いた要素は、スクロールバーの幅だけ右に動きます。気になる場合はサイト側で調整してください
 
-- モーダルの開閉でスクロールバーが出入りしても表示領域の幅が変わらないため、背景画像が動きません。
-- スクロール不要な短いページでも常に溝（薄い余白）が表示されます。
-- Safari は 18.2 以降で対応しています。未対応の環境では従来どおりの挙動になります（悪化はしません）。
+`html` に `scrollbar-gutter: stable` を指定する対策は、おすすめしません（v3.1.0 までの README で紹介していました）。
+開いている間もスクロールバーの溝が残り、その部分が背景（`::backdrop`）で覆われず、帯のように見えます。
+指定されている場合は、溝で幅が変わらないので、ライブラリは補正しません。
 
 ## コンテンツタイプ
 
@@ -472,6 +470,7 @@ SygModalDialogは以下の3層構造で設計されています:
 ```
 SygModalDialog (ロジック層)
   ├── SygModalUI (UI層)
+  │     └── scrollLock（背景のスクロールを止める。Vue版と共有）
   └── loaders/
       ├── youtubeLoader
       ├── imageLoader
@@ -541,6 +540,13 @@ SygModalDialog.showModal(options);
 MIT
 
 ## 変更履歴
+
+### v3.2.0
+- 追加
+  - 開いている間、消えたスクロールバーの幅を `html` の `padding-right` で補正するようにした（背景のずれと、`scrollbar-gutter: stable` を使ったときに右端が背景で覆われない問題への対策）
+- 修正
+  - YouTube の iframe の下に、文字のベースラインの分の隙間（約 7px）ができ、上下の中央がずれていた
+  - Vue 版で、閉じるボタン・ESC で閉じると背景のスクロールが止まったままになっていた
 
 ### v3.1.0
 Fancybox 3 からの移行で足りなかった機能の追加と、不具合の修正。今の使い方はそのまま動きます。
